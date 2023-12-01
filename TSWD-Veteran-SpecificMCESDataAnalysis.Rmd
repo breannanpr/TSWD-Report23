@@ -1,0 +1,29 @@
+---
+title: "Veteran-Specific MCES Data Analysis"
+author: "Breanna Niekamp, Intern"
+date: "December 1, 2023"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Executive Summary
+```{r}
+## Executive summary with the key conclusions. Imagine this report is going to be circulated up the organizational hierarchy all the way to the mayor’s office. What are the key conclusions that those in the upper echelons of city government would need to know?
+```
+
+
+## Body
+```{r}
+## The body of the document should give a narrative overview of your analysis of the topic you chose. Make sure to cover some of the basics (seasonality, trends, descriptive statistics, etc.). Then dive deeper into the results you've found.
+```
+
+## Supporting Visualizations
+```{r}
+## As part of the report process, you’re expected to create visualizations that support your observations and conclusions. Imagine that  these charts will likely be incorporated into presentations given by your boss and her peers, so strive for clarity and graphics that can stand on their own. Put headlines on your charts here. Subject all charts that you make to the Data Visualization checklist process.
+```
+
+
+
