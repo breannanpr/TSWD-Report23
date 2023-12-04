@@ -4,12 +4,10 @@ destdat = read.csv("destination_data20231122.csv")
 surveydat = read.csv("survey_data20231122.csv")
 solutionfunddat = read.csv("solutions_fund20231122.csv")
 
-#merge data
-mergeddat = merge(mcesdat,destdat, by = "Client.ID", all.x = TRUE)
+# Exploring housing destinations and rapidity of housing allocation for veterans. 
 
-#Exploring housing destinations and rapidity of housing allocation for veterans. 
-library(dplyr)
-library(ggplot2)
+# Investigating the duration veterans spend in MCES compared to non-veterans. Has this changed over time?
 
 
+# Analyze the most common prior living situations for veterans
 
