@@ -1,29 +1,131 @@
 ---
 title: "Veteran-Specific MCES Data Analysis"
-author: "Breanna Niekamp, Intern"
-date: "December 1, 2023"
+author: "Breanna Niekamp, Intern and MSBA Student at the University of Montana"
+date: "December 3, 2023"
 output: word_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+## Introduction
+
+The city of Missoula has dedicated time to study Missoula’s unhoused populations, including efforts of data collection and establishing a coordinated system for tracking homelessness. However, Missoula is not alone in understanding and researching homelessness in general. Many studies have been conducted over the course of many years even dating back to the end of the Civil War, and more recently the Covid-19 Pandemic and how that affected homelessness. 
+	According to research by Dr. Brendan O’Flaherty whom is a professor of economics at Columbia University, previously predicted an increase in homelessness by 40-50% for 2020. At the time the US unemployment rates reached a whopping 14.7%, which he compares to the Great Depression of 1933. In his research he follows methods conducted by Kevin Corinth of American Enterprise Institute, out of Washington DC. Corinth wrote an article about the impact of permanent supportive housing on homeless populations covering the period of time between 2007 and 2014 in the United States. National counts of homeless populations decreased as permanent supportive housing (PSH) for the homeless increased. 
+	Some key points from Corinth’s study included; that for every one additional PSH bed, between 0.04 and 0.12 fewer homeless people experienced homelessness. He theorized that federal funds allocated to communities that would allow homeless assistance directly reduced the homeless counts. He was able to back up his claim by toting a 95% confidence level. Corinth was sincerely shooting for precision when he conducted his study, however there is still 5% chance that he is wrong due to unknown factors that could affect the data he conducted his study with. Some of these factors such as poor targeting and errors in homeless counts (among others) were prime reasons for his remaining 5% uncertainty. 
+	Analyzing a few components of the provided data may allow us to reasonably request government funding that can be allocated towards not just homeless populations but specifically veteran homeless populations.
 
 ## Executive Summary
+
+The keypoints from this study are as follows:
+1. A majority of Veterans experiencing homelessness will endure it between 121 and 356 days.
+2. There were five Veterans within the tracking system whom endured homelessness for more than 1000 days. 
+3. The leading reason Veterans are able to cease being homeless based on our data is becoming able to rent without 4. subsidy. However, a majority of Veterans (even more than being able to rent without subsidy) do not participate in an exit interview or one does not exist for them. 
+5. Men (or boys) are the leading gender of Veterans experiencing homelessness. 
+
+### Distribution of Days to Exit for Veterans
+The distribution of days to exit for veterans helps us understand how long veterans stay in the homelessness system before exiting. Below we can see that a majority of Veterans experience homelessness between 121 and 365 days before exiting the system. That is nearly 4 months to up to 1 year homeless. In Missoula that means they are at risk for being exposed to extreme natural circumstances such as severe weather, below zero temperatures and a multitude of predatory wildlife. There was a median here of 187 days and on average, including outliers veterans experience 269 days of homelessness. 
 ```{r}
-## Executive summary with the key conclusions. Imagine this report is going to be circulated up the organizational hierarchy all the way to the mayor’s office. What are the key conclusions that those in the upper echelons of city government would need to know?
+destdat = read.csv("destination_data20231122.csv")
+hist(destdat$Days.to.Exit.Destination[destdat$Veteran == "Yes (HUD)" & destdat$Days.to.Exit.Destination <= 1000],
+     main = "Majority of Veterans Experience Homelessness between 121 and 356 days",
+     sub = "Distribution of Days Homelessness Experienced (up to 1000)",
+     xlab = "Days to Exit",
+     col = "maroon",
+     border = "orange")
 ```
 
-
-## Body
+However, there were also five veterans who experienced ‘extreme circumstances’ of homelessness, given that they were homeless for 1000 days or greater. These types of veterans should be high-priority, and could even be considered the most at-risk for becoming deceased whilst experiencing homelessness.
 ```{r}
-## The body of the document should give a narrative overview of your analysis of the topic you chose. Make sure to cover some of the basics (seasonality, trends, descriptive statistics, etc.). Then dive deeper into the results you've found.
+hist(destdat$Days.to.Exit.Destination[destdat$Veteran == "Yes (HUD)" & destdat$Days.to.Exit.Destination >= 1000],
+     main = "Five Veterans Experienced more than 1000 days of Homelessness",
+     sub = "Distribution of Days Homelessness Experienced (Greater than 1000)",
+     xlab = "Days to Exit",
+     col = "maroon",
+     border = "orange")
 ```
 
-## Supporting Visualizations
+Understanding these graphs above will help us to better prioritize which veterans to help first. It’s worth considering that veterans who have been experiencing homelessness the longest as top priority as they may become high-risk for becoming deceased before the find relief in some cases. 
+
+### Exit Destination Proportions for Veterans
+
+Here we can see a visualization where Veterans “end up” once they are out of homelessness or once they are out of the system. Unfortunately, it is difficult to pinpoint exactly what the true leading causes for Veterans escaping homelessness are because even more than renting without a subsidy, we lose track of our Veterans. For some reason, most of them either do not participate in an exit intake or they fall off our radar without us knowing about it or what happens to them. We need to be able to keep better track of our Veteran community members as a society.
+
 ```{r}
-## As part of the report process, you’re expected to create visualizations that support your observations and conclusions. Imagine that  these charts will likely be incorporated into presentations given by your boss and her peers, so strive for clarity and graphics that can stand on their own. Put headlines on your charts here. Subject all charts that you make to the Data Visualization checklist process.
+veterandestcounts = table(destdat$Entry.Exit.Destination[destdat$Veteran == "Yes (HUD)"])
+orderedcounts = veterandestcounts[order(veterandestcounts)]
+
+destmapping <- c(
+  "No exit interview completed (HUD)" = "No Exit Interview",
+  "Rental by client, no ongoing housing subsidy (HUD)" = "Rental, No Subsidy",
+  "Rental by client, with ongoing housing subsidy (HUD)" = "Rental, With Subsidy", 
+  "Staying or living with family, permanent tenure (HUD)" = "Family, Permanent",
+  "Staying or living with family, temporary tenure (e.g., room, apartment, or house) (HUD)" = "Family, Temporary",
+  "Substance abuse treatment facility or detox center (HUD)" = "Substance Abuse Facility",
+  "Staying or living with friends, temporary tenure (e.g., room, apartment, or house) (HUD)" = "Friends, Temporary",
+  "Jail, prison, or juvenile detention facility (HUD)" = "Jail, Prison, Juvenile Facility",
+  "Staying or living with friends, permanent tenure (HUD)" = "Friends, Permanent",
+  "Transitional housing for homeless persons (including homeless youth) (HUD)" = "Transitional House, Including Youth",
+  "Place not meant for habitation (e.g., a vehicle, an abandoned building, bus/train/subway station/airport or anywhere outside) (HUD)" = "Not Meant for Habitation",
+  "Residential project or halfway house with no homeless criteria (HUD)" = "Residential Project / Halfway House",
+  "Emergency shelter, including hotel or motel paid for with emergency shelter voucher, Host Home shelter (HUD)" = "Emergency Shelter",
+  "Psychiatric hospital or other psychiatric facility (HUD)" = "Psychiatric Facility",
+  "Deceased (HUD)" = "Deceased",
+  "Long-term care facility or nursing home (HUD)" = "Nursing Home / Long Term Care",
+  "Hospital or other residential non-psychiatric medical facility (HUD)" = "Hospital",
+  "Other (HUD)" = "Other",
+  "Client prefers not to answer (HUD)" = "Prefered Not to Answer",
+  "Moved from one HOPWA funded project to HOPWA PH (HUD)" = "HOPWA to HOPWA PH",
+  "Hotel or motel paid for without emergency shelter voucher (HUD)" = "Hotel without Emergency Voucher",
+  "Foster care home or foster care group home (HUD)" = "Foster Care / Group Home",
+  "Owned by client, no ongoing housing subsidy (HUD)" = "Owned Home, no Subsidy",
+  "Host Home (non-crisis) (HUD)" = "Host Home",
+  "Owned by client, with ongoing housing subsidy (HUD)" = "Owned Home, with Subsidy"
+)
+
+destdat$ShortEntryExitDestination = destmapping[destdat$Entry.Exit.Destination]
+uniqueshortdestinations = unique(destdat$ShortEntryExitDestination)
+shortdestcounts = table(destdat$ShortEntryExitDestination)
+neworderedcounts = shortdestcounts[order(shortdestcounts)]
+
+par(mar = c(5, 9, 5, 9) + 0.1)
+barplot(neworderedcounts,
+        names.arg = names(neworderedcounts),
+        main = "Veterans Renting without Assistance Leading Cause to End Homelessness",
+        sub = "Veteran Entry Exit Destinations by Greatest to Least",
+        xlab = "Number of Veterans",
+        ylab = "",
+        col = "maroon",
+        horiz = TRUE,
+        las = 1,
+        cex.names = 0.5,
+        xlim = c(0, 250))
+mtext("Entry Exit Destination", side = 2, line = 1, at = 31, las = 1, cex = 0.7)
 ```
 
+### Gender of Veterans
 
+Below, we can see that men or males (boys, if children) are the leading gender within the homeless Veteran population. Among them there were 19 female Veterans, and only 2 individuals were non-binary or did not provide their gender information. It’s concerning to see that such a significant amount of the gender is males however, it is known that male Veterans are at greater risk for experiencing homelessness due to a variety of circumstances. We need to explore why this happens, and find solutions to mitigate this number. 
+
+```{r}
+gentabledat = table(destdat$Gender[destdat$Veteran == "Yes (HUD)"])
+
+barplot(gentabledat, 
+        col = "maroon", 
+        main = "Veterans by Gender",
+        xlab = "Gender", 
+        ylab = "Count", 
+        ylim = c(0,200))
+text(rep(seq_along(table_data), each = 1), table_data + 5, labels = table_data, pos = 3, col = "black", cex = 0.8)
+```
+
+## Conclusion
+
+  In conclusion, the research conducted in Missoula on homelessness, particularly among veterans, sheds light on crucial aspects that demand attention and strategic interventions. While the city has made commendable efforts in studying and tracking the unhoused populations, it is imperative to recognize that homelessness is a multifaceted issue with deep-rooted historical precedents. The research places Missoula within the broader context of nationwide studies, drawing parallels with historical events like the end of the Civil War, as well as contemporary challenges exemplified by the economic impacts of the Covid-19 pandemic.
+
+  Kevin Corinth's work on permanent supportive housing (PSH) provides a tangible link between proactive government funding and a reduction in homeless counts, emphasizing the potential effectiveness of targeted interventions. Despite the precision sought by Corinth in his study, the inherent uncertainty remains, underscoring the need for ongoing research and adaptability in addressing homelessness. The data addressed within this report also underscores the significance of ending veteran homelessness, although the low participation in exit interviews poses a challenge in fully understanding and addressing some of these issues.
+
+  Moreover, the predominant role of men (or boys) among homeless veterans, brings to light the importance of gender-sensitive approaches in addressing this specific demographic. To create a comprehensive and sustainable impact, the findings suggest that government funding should be strategically directed not only toward general homeless populations but with a specific focus on veterans.
+
+  Missoula's initiatives to address homelessness are recommended to be further refined, incorporating evidence-based strategies and collaborating with relevant stakeholders. Recognizing the unique challenges faced by homeless veterans demographic creates a compelling narrative that encourages continued research, policy innovation, and a collective commitment to combat homelessness in Missoula and surrounding communities.
 
