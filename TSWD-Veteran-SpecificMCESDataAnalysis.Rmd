@@ -26,7 +26,6 @@ The keypoints from this study are as follows:
 ### Distribution of Days to Exit for Veterans
 The distribution of days to exit for veterans helps us understand how long veterans stay in the homelessness system before exiting. Below we can see that a majority of Veterans experience homelessness between 121 and 365 days before exiting the system. That is nearly 4 months to up to 1 year homeless. In Missoula that means they are at risk for being exposed to extreme natural circumstances such as severe weather, below zero temperatures and a multitude of predatory wildlife. There was a median here of 187 days and on average, including outliers veterans experience 269 days of homelessness. 
 ```{r}
-destdat = read.csv("destination_data20231122.csv")
 hist(destdat$Days.to.Exit.Destination[destdat$Veteran == "Yes (HUD)" & destdat$Days.to.Exit.Destination <= 1000],
      main = "Majority of Veterans Experience Homelessness between 121 and 356 days",
      sub = "Distribution of Days Homelessness Experienced (up to 1000)",
